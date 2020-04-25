@@ -6,6 +6,7 @@
     border-radius: 20px;
     padding: 20px;
     padding-bottom: 5px;
+    padding-top: 15px;
     width: fit-content;
 }
 
@@ -15,6 +16,7 @@
     border: 0px solid #E5E5E5;
     height: 30px;
     width: 30px;
+    margin: -6px;
 }
 
 .line-color{
@@ -58,7 +60,6 @@
     top: 0;
     right: 0;
 }
-
 #red{
     background: red;
 }
@@ -89,4 +90,8 @@
 
 #magenta{
     background: #FF00FF;
+}
+
+#white{
+    background: white;
 }
