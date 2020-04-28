@@ -57,14 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Checking if the target is a coll and then add the color to that
-
-    /*container.addEventListener('click', function (e) {
-        if (coll.includes(e.target)) {
-            e.target.style.background = color;
-        }
-    }); */
-
     // Clean all
 
     button.addEventListener('click', function () {
@@ -73,30 +65,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Show user which color is being used
-
 
     // PAINTBRUSH
 
-    container.addEventListener('mousedown', function (e) {
-        if (coll.includes(e.target)) {
-            e.target.style.background = color;
-            over();
+    function mouseOver(el) {
+        if (coll.includes(el.target)) {
+            el.target.style.background = color;
         }
-
-    });
-
-    function over() {
-        container.addEventListener('mouseover', function mouseOver(e) {
-            if (coll.includes(e.target)) {
-                e.target.style.background = color;
-            }
-            document.addEventListener('mouseup', function (e) {
-                container.removeEventListener('mouseover', mouseOver);
-            });
+        document.addEventListener('mouseup', function () {
+            container.removeEventListener('mouseover', mouseOver);
         });
     }
 
+    container.addEventListener('mousedown', function (e) {
+        let mouseTarget = e.target;
+        if (coll.includes(mouseTarget)) {
+            mouseTarget.style.background = color;
+
+            container.addEventListener('mouseover', mouseOver);
+
+            container.addEventListener('mouseup', function (event) {
+                if (event.target == mouseTarget) {
+                    container.removeEventListener('mouseover', mouseOver);
+                }
+            });
+        }
+
+    });
 
     // INPUT COLOR
 
@@ -125,27 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return colors;
     }
 
-    function areKeys() {
-        let k = 0;
-        for (let i in localStorage) {
-            k++;
-        }
-        if (k == 6) {
-            return false;
-        }
-        return true;
-    }
-
-    function loadColors(key) {
-        let colorsArr = localStorage.getItem(key);
-        colorsArr = JSON.parse(colorsArr);
-        col.forEach(function (item, index) {
-            item.style.background = colorsCol[index];
-        });
-    }
-
     function containsOp(val, arr) {
-        for(let i = 0; i < arr.length; i++){
+        for (let i = 0; i < arr.length; i++) {
             if (arr[i].value == val) {
                 return true;
             }
@@ -153,30 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return false;
     }
 
-    function showSavings() {
-        let size = localStorage.length,
-            options = document.querySelectorAll('option'),
-            k = 0;
-        
-        for (let i in localStorage) {
-            if (containsOp(i, options)) {
-                k++;
-            } else {
-                let option = document.createElement('option');
-                option.innerText = i;
-                option.value = i;
-                select.appendChild(option);
-                k++;
-            }
-
-            if (k == size) {
-                break;
-            }
-        }
-
-        let divSelect = document.querySelector('.select');
-        divSelect.style.display = 'block';
-    }
 
     esc.addEventListener('click', function () {
         alert.style.display = 'none';
@@ -199,15 +151,92 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    //LOAD
+
+    function loadColors(key) {
+        let colorsArr = localStorage.getItem(key);
+        colorsArr = JSON.parse(colorsArr);
+        col.forEach(function (item, index) {
+            item.style.background = colorsArr[index];
+        });
+    }
+
+    function areKeys() {
+        let k = 0;
+        for (let i in localStorage) {
+            k++;
+        }
+        if (k == 6) {
+            return false;
+        }
+        return true;
+    }
+
+    function showSavings() {
+        let size = localStorage.length,
+            options = document.querySelectorAll('option'),
+            k = 0;
+
+        for (let i in localStorage) {
+            if (containsOp(i, options)) {
+                k++;
+            } else {
+                let option = document.createElement('option');
+                option.innerText = i;
+                option.value = i;
+                select.appendChild(option);
+                k++;
+            }
+
+            if (k == size) {
+                break;
+            }
+        }
+
+        let divSelect = document.querySelector('.select');
+        divSelect.style.display = 'block';
+    }
+
+    let selectOk = document.querySelector('#selectOk');
 
     load.addEventListener('click', function () {
         if (areKeys()) {
             showSavings();
+            selectOk.addEventListener('click', function selOke() {
+                loadColors(select.value);
+
+                let divSelect = document.querySelector('.select');
+                divSelect.style.display = 'none';
+                selectOk.removeEventListener('click', selOke);
+            });
         } else {
             alert.style.display = 'block';
         }
     });
 
+    // DELETE
+    let deleteBut = document.querySelector('#delete');
+    deleteBut.addEventListener('click', function () {
+        if (areKeys()) {
+            showSavings();
+            selectOk.addEventListener('click', function selOk() {
+                options = document.querySelectorAll('option');
+                localStorage.removeItem(select.value);
+                options.forEach(function (item) {
+                    if (select.value == item.value) {
+                        item.remove();
+                    }
+                });
+
+
+                let divSelect = document.querySelector('.select');
+                divSelect.style.display = 'none';
+                selectOk.removeEventListener('click', selOk);
+            });
+        } else {
+            alert.style.display = 'block';
+        }
+    });
 
     // DELETE ALL
 
@@ -226,10 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let divSelect = document.querySelector('.select');
         divSelect.style.display = 'none';
     });
-
-
-
-
 
 
 });
