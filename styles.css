@@ -28,6 +28,7 @@ button::-moz-focus-inner {
 
 .line-color{
     padding-top: 10px;
+    position: relative;
 }
 
 .coll-rep {
@@ -96,6 +97,14 @@ p{
 
 .hide{
     display: none;
+}
+.fill{
+    background: #18A3D2;
+    border-color:#18A3D2;
+    position: absolute;
+    top: 55%;
+    transform: translateY(-50%);
+    margin-left: 10px;
 }
 
 #inputSave{

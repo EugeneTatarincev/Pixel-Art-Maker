@@ -256,5 +256,14 @@ document.addEventListener('DOMContentLoaded', function () {
         divSelect.style.display = 'none';
     });
 
+    // FILL --------------------------+++--------------------------------------
+    
+    //making double array
+    
+    let doubleArr = [];
+    for(let i = 0; i < row.length; i++){
+        doubleArr.push(row[i].childNodes);
+    }
+    
 
 });
